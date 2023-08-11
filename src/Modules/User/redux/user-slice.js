@@ -1,7 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiClient } from "../../../Shared/Services/api-client";
-
-
+import axios from 'axios';
+export const postObject = (objectData) => async(dispatch) => {
+    try {
+        const response = await axios.post('http://localhost:7777/add-user', objectData); // Adjust the API endpoint URL
+        dispatch(addUser(response.data));
+    } catch (error) {
+        dispatch({ type: 'POST_OBJECT_FAILURE', payload: error.message });
+    }
+};
 
 export const fetchUsers = createAsyncThunk('users/fetch', async() => {
     try {
@@ -24,10 +31,12 @@ const userSlice = createSlice({
         err: null
     },
     reducers: {
+
         addUser(state, action) {
-            const userObject = action.payload;
-            state.users.push(userObject);
-            return state;
+            //const userObject = action.payload;
+            //state.users.push(userObject);
+            //return state;
+            state.users.push(action.payload)
         },
         getTotalRecords(state, action) {
             state.total = state.users.length;

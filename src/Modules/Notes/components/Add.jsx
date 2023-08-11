@@ -17,9 +17,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
 //import { noteOperations } from '../services/noteOperations';
-import { addNote  } from '../redux/note-slice';
+import { addNote, postObject  } from '../redux/note-slice';
 import { Note } from '../models/Note';
 import {useDispatch} from 'react-redux';
+import { NewNote } from '../models/NewNote';
 export const Add = ()=>{
     const id = useRef();
     const title = useRef();
@@ -51,7 +52,9 @@ export const Add = ()=>{
         const dateValue = date ? dayjs(date).format('MM/DD/YYYY'):'';
         //noteOperations.addNote(idValue,titleValue,descValue,dateValue,color)
         const noteObject = new Note(idValue,titleValue,descValue,dateValue,color);
-        dispatch(addNote(noteObject));
+        const newNoteObject = new NewNote(titleValue,descValue,dateValue,color);
+        dispatch(postObject(newNoteObject));
+        dispatch(addNote(newNoteObject));
         //sortDispatch(sort());
         //props.fn();
         setOpen(true);

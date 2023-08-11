@@ -13,7 +13,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import {useDispatch} from 'react-redux';
 import { User } from '../models/User';
-import { addUser } from '../redux/user-slice';
+import { addUser, postObject } from '../redux/user-slice';
+import { NewUser } from '../models/NewUser';
 
 export const Register = () =>{
     const id = useRef();
@@ -46,7 +47,9 @@ export const Register = () =>{
     const passwordValue = password.current.value;
 
     const userObject = new User(idValue,nameValue,phoneValue,emailValue,passwordValue);
-    dispatch(addUser(userObject));
+    const newUserObject = new NewUser(nameValue,phoneValue,emailValue,passwordValue);
+    dispatch(postObject(newUserObject));
+    dispatch(addUser(newUserObject));
     setOpen(true);
 
   }

@@ -2,6 +2,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { apiClient } from "../../../Shared/Services/api-client";
 
 
+import axios from 'axios';
+export const postObject = (objectData) => async(dispatch) => {
+    try {
+        const response = await axios.post('http://localhost:7777/add-note', objectData); // Adjust the API endpoint URL
+        dispatch(addNote(response.data));
+    } catch (error) {
+        dispatch({ type: 'POST_OBJECT_FAILURE', payload: error.message });
+    }
+};
+
 export const fetchNotes = createAsyncThunk('notes/fetch', async() => {
     try {
 
@@ -28,9 +38,10 @@ const noteSlice = createSlice({
         //action - coming from the component
         //state - update the centralized store
         addNote(state, action) {
-            const noteObject = action.payload;
-            state.notes.push(noteObject)
-            return state;
+            // const noteObject = action.payload;
+            // state.notes.push(noteObject)
+            // return state;
+            state.notes.push(action.payload);
         },
         getTotalRecords(state, action) {
             state.total = state.notes.length;
