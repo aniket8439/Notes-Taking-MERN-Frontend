@@ -3,9 +3,18 @@ import { apiClient } from "../../../Shared/Services/api-client";
 
 
 import axios from 'axios';
+export const deleteNote = (noteTitle) => async(dispatch) => {
+    try {
+        const response = await axios.delete(`http://localhost:7777/delete?title=${noteTitle}`);
+        dispatch(removeNote(response.data));
+    } catch (error) {
+        dispatch({ type: 'DELETE_NOTE_FAILURE', payload: error.message });
+    }
+};
+
 export const postObject = (objectData) => async(dispatch) => {
     try {
-        const response = await axios.post('http://localhost:7777/add-note', objectData); // Adjust the API endpoint URL
+        const response = await axios.post(process.env.REACT_APP_NOTES_POST_URL, objectData); // Adjust the API endpoint URL
         dispatch(addNote(response.data));
     } catch (error) {
         dispatch({ type: 'POST_OBJECT_FAILURE', payload: error.message });
@@ -64,7 +73,7 @@ const noteSlice = createSlice({
             })
         },
         removeNote(state, action) {
-
+            state.notes.filter((note) => note.title !== action.payload);
         },
         getNotes(state, action) {
 

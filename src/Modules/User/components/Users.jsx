@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import  { fetchUsers, getTotalRecords, searchUser, sortUser } from '../redux/user-slice';
+import  { deleteUser, fetchUsers, getTotalRecords, searchUser, sortUser } from '../redux/user-slice';
 
 
 export const Users = () => {
@@ -24,6 +24,13 @@ export const Users = () => {
       const searchData = {search:searchValue};
       dispatch(searchUser(searchData))
     }
+
+    const handleDelete = (userEmail) => {
+      dispatch(deleteUser(userEmail));
+      window.location.reload();
+    };
+
+
     const sortIt =(event)=>{
         const sortBy = event.target.value;
         setSort(sortBy);
@@ -91,7 +98,7 @@ export const Users = () => {
               <TableCell align="left">{user.email}</TableCell>
               <TableCell align="right">{user.password}</TableCell>
               {/* <TableCell align="right"><i class="fa-solid fa-trash"></i> <i class="fa-solid fa-pen-to-square"></i></TableCell> */}
-              <TableCell align='right'><i className="fa-solid fa-trash"></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
+              <TableCell align='right'><i className="fa-solid fa-trash" onClick={() => handleDelete(user.email)}></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
           </TableRow>);
           })}
             {userObject.result.length == 0 && userObject.users.map(user=> {
@@ -102,7 +109,7 @@ export const Users = () => {
                         <TableCell>{user.phone}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell align='right'>{user.password}</TableCell>
-                        <TableCell align='right'><i className="fa-solid fa-trash"></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
+                        <TableCell align='right'><i className="fa-solid fa-trash" onClick={() => handleDelete(user.email)}></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
                     </TableRow>
                 )
             }

@@ -3,10 +3,19 @@ import { apiClient } from "../../../Shared/Services/api-client";
 import axios from 'axios';
 export const postObject = (objectData) => async(dispatch) => {
     try {
-        const response = await axios.post('http://localhost:7777/add-user', objectData); // Adjust the API endpoint URL
+        const response = await axios.post(process.env.REACT_APP_USERS_POST_URL, objectData); // Adjust the API endpoint URL
         dispatch(addUser(response.data));
     } catch (error) {
         dispatch({ type: 'POST_OBJECT_FAILURE', payload: error.message });
+    }
+};
+
+export const deleteUser = (userEmail) => async(dispatch) => {
+    try {
+        const response = await axios.delete(`http://localhost:7777/delete-user?email=${userEmail}`);
+        dispatch(removeUser(response.data));
+    } catch (error) {
+        dispatch({ type: 'DELETE_USER_FAILURE', payload: error.message });
     }
 };
 
@@ -56,7 +65,11 @@ const userSlice = createSlice({
             const searchObj = action.payload;
             console.log('Search Obj :::', searchObj);
             state['search-result'] = state.users.filter(user => user.id == searchObj.search);
+        },
+        removeUser(state, action) {
+            state.users.filter((user) => user.email !== action.payload);
         }
+
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUsers.pending, (state, action) => {
@@ -81,7 +94,8 @@ export const {
     addUser,
     getTotalRecords,
     sortUser,
-    searchUser
+    searchUser,
+    removeUser
 } = userSlice.actions;
 
 export default userSlice.reducer;

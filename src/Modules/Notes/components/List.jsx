@@ -9,7 +9,7 @@ import { styled } from '@mui/material/styles';
 //import { noteOperations } from '../services/noteOperations';
 import {  useDispatch, useSelector } from 'react-redux';
  import { useEffect, useState } from 'react';
- import { fetchNotes, getTotalRecords, sortNote } from '../redux/note-slice';
+ import { deleteNote, fetchNotes, getTotalRecords, sortNote } from '../redux/note-slice';
 import TextField from '@mui/material/TextField';
 import { searchNote } from '../redux/note-slice';
 import Select from '@mui/material/Select';
@@ -25,6 +25,12 @@ export const List = () => {
     const searchData = {search:searchValue};
     dispatch(searchNote(searchData))
   }
+
+  const handleDelete = (noteTitle) => {
+    dispatch(deleteNote(noteTitle));
+    window.location.reload();
+  };
+
   const sortIt =(event)=>{
       const sortBy = event.target.value;
       setSort(sortBy);
@@ -86,7 +92,7 @@ export const List = () => {
               <TableCell align="left">{note.cdate}</TableCell>
               <TableCell align="right">{note.importance}</TableCell>
               {/* <TableCell align="right"><i class="fa-solid fa-trash"></i> <i class="fa-solid fa-pen-to-square"></i></TableCell> */}
-              <TableCell align='right'><i className="fa-solid fa-trash"></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
+              <TableCell align='right'><i className="fa-solid fa-trash" onClick={() => handleDelete(note.title)}></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
           </TableRow>);
           })}
             {noteObject.result.length == 0 && noteObject.notes.map(note=> {
@@ -97,7 +103,7 @@ export const List = () => {
                         <TableCell>{note.descr}</TableCell>
                         <TableCell>{note.cdate}</TableCell>
                         <TableCell align='right'>{note.importance}</TableCell>
-                        <TableCell align='right'><i className="fa-solid fa-trash"></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
+                        <TableCell align='right'><i className="fa-solid fa-trash" onClick={() => handleDelete(note.title)}></i><i className="fa-solid fa-pen-to-square"></i></TableCell>
                     </TableRow>
                 )
             }
